@@ -36,17 +36,27 @@ public class Main
 
     public static HashMap<Integer, Estudiante> armarDiccionario(List<String> lineasDelArchivo)
     {
-        String[] infoEstudiante;
-        //Armado del diccionario
-        HashMap<Integer, Estudiante> diccionario = new HashMap<Integer, Estudiante>();
+        // Crear un diccionario (HashMap) para almacenar a los estudiantes
+        HashMap<Integer, Estudiante> diccionario = new HashMap<>();
+        String[] datos;
         for (String linea: lineasDelArchivo) {
-            infoEstudiante = linea.split(",");
-            Estudiante estudiante = new Estudiante(infoEstudiante[1], Integer.parseInt(infoEstudiante[0]));
-            estudiante.getMateriasAprobadas().add(infoEstudiante[2]);
-            diccionario.put(estudiante.getLegajo(),estudiante);
+            datos = linea.split(",");
+            int legajo = Integer.parseInt(datos[0]);
+            String nombreApellido = datos[1];
+            String materiaAprobada = datos[2];
+
+            // Verificar si el estudiante ya existe en el diccionario
+            if (diccionario.containsKey(legajo)) {
+                diccionario.get(legajo).getMateriasAprobadas().add(materiaAprobada);
+            } else {
+                Estudiante estudiante = new Estudiante(nombreApellido,legajo);
+                estudiante.getMateriasAprobadas().add(materiaAprobada);
+                diccionario.put(legajo, estudiante);
+            }
         }
         return diccionario;
     }
+
 
     public static void mostrarMenu(HashMap<Integer,Estudiante> diccionario)
     {
@@ -63,11 +73,15 @@ public class Main
                         int legajo = sc.nextInt();
                         if (legajo < 0) {
                             throw new NumeroNegativoException();
-                        } else {
+                        }
+                        else {
                             diccionario.forEach((key, value) -> {
-                                if (key.equals(legajo)) { //si numero legajo esta en el diccionario
+                                if (key.equals(legajo)) {
                                     //mostrar en consola resultados
                                     System.out.println(key + " " + value.getNombreApellido() + " " + value.getMateriasAprobadas());
+                                }
+                                else {
+                                    System.out.println("Legajo invalido");
                                 }
                             });
                         }
@@ -80,13 +94,6 @@ public class Main
                 System.out.println("1) Ingreso de Legajo");
                 System.out.println("2) Salir");
                 opcion = sc.nextInt();
-                //verficar si hay nuevas materias aprobadas
-                //si hay nuevas
-                //agregar en la lista
-                //mostrar datos (legajo - nombre - listado de materias)
-
-                //si numero legajo no esta en el diccionario
-                //agregar estudiante con sus materias aprobadas
             }
             System.out.println("Aplicacion Finalizada.");
         }catch (InputMismatchException ime){
