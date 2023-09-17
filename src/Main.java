@@ -57,7 +57,6 @@ public class Main
         return diccionario;
     }
 
-
     public static void mostrarMenu(HashMap<Integer,Estudiante> diccionario)
     {
         Scanner sc = new Scanner(System.in);
@@ -66,6 +65,7 @@ public class Main
             System.out.println("1) Ingreso de Legajo");
             System.out.println("2) Salir");
             int opcion = sc.nextInt();
+
             while (opcion != 2) {
                 switch (opcion) {
                     case 1:
@@ -75,15 +75,14 @@ public class Main
                             throw new NumeroNegativoException();
                         }
                         else {
-                            diccionario.forEach((key, value) -> {
-                                if (key.equals(legajo)) {
-                                    //mostrar en consola resultados
-                                    System.out.println(key + " " + value.getNombreApellido() + " " + value.getMateriasAprobadas());
-                                }
-                                else {
-                                    System.out.println("Legajo invalido");
-                                }
-                            });
+                            //mostrar en consola resultados
+                            if (diccionario.containsKey(legajo)){
+                                System.out.println(diccionario.get(legajo).getLegajo() + " " + diccionario.get(legajo).getNombreApellido() + " "
+                                        + diccionario.get(legajo).getMateriasAprobadas());
+                            }
+                            else {
+                                System.out.println("Legajo invalido");
+                            }
                         }
                         break;
                     default:
@@ -104,6 +103,5 @@ public class Main
             System.out.println("Ocurrio un ERROR desconocido.");
         }
     }
-
 
 }
